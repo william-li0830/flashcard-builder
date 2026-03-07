@@ -18,6 +18,8 @@ public class MainScreen extends javax.swing.JFrame {
      */
     public MainScreen() {
         flashcardManager = new FlashcardManager();
+        flashcardManager.loadFromFile();
+        
         initComponents();
 
         setTitle("Flashcard Builder");
@@ -27,6 +29,7 @@ public class MainScreen extends javax.swing.JFrame {
 
         cardListModel = new DefaultListModel<>();
         cardList.setModel(cardListModel);
+        refreshCardList();
     }
 
     private void refreshCardList() {
