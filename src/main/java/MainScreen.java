@@ -49,11 +49,40 @@ public class MainScreen extends javax.swing.JFrame {
         studyButton = new javax.swing.JButton();
         viewAllButton = new javax.swing.JButton();
         buildCard = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        buildCardLabel = new javax.swing.JLabel();
+        frontBackPanel = new javax.swing.JPanel();
+        frontLabel = new javax.swing.JLabel();
+        frontTextField = new javax.swing.JTextField();
+        backLabel = new javax.swing.JLabel();
+        backTextField = new javax.swing.JTextField();
+        addPanel = new javax.swing.JPanel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        addCard = new javax.swing.JButton();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        errorLabel = new javax.swing.JLabel();
+        backPanel = new javax.swing.JPanel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        backButton = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         studyCard = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        flashcardPanel = new javax.swing.JPanel();
+        studyLabel = new javax.swing.JLabel();
+        buttonGroup = new javax.swing.JPanel();
+        prevButton = new javax.swing.JButton();
+        flipButton = new javax.swing.JButton();
+        nextButton = new javax.swing.JButton();
+        studyBackButton = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         viewAllCard = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        allCardsLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        viewAllButtonGroup = new javax.swing.JPanel();
+        removeButton = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        viewAllBackButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,66 +127,126 @@ public class MainScreen extends javax.swing.JFrame {
 
         mainFrame.add(menuCard, "menuCard");
 
-        jLabel1.setText("Build card");
+        buildCard.setPreferredSize(new java.awt.Dimension(400, 300));
+        buildCard.setLayout(new java.awt.GridLayout(4, 0, 0, 20));
 
-        javax.swing.GroupLayout buildCardLayout = new javax.swing.GroupLayout(buildCard);
-        buildCard.setLayout(buildCardLayout);
-        buildCardLayout.setHorizontalGroup(
-            buildCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buildCardLayout.createSequentialGroup()
-                .addGap(336, 336, 336)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(175, Short.MAX_VALUE))
-        );
-        buildCardLayout.setVerticalGroup(
-            buildCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(buildCardLayout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(312, Short.MAX_VALUE))
-        );
+        buildCardLabel.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        buildCardLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        buildCardLabel.setText("Build Card");
+        buildCard.add(buildCardLabel);
+
+        frontBackPanel.setLayout(new java.awt.GridLayout(2, 4, 0, 10));
+
+        frontLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        frontLabel.setText("Front");
+        frontBackPanel.add(frontLabel);
+
+        frontTextField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        frontBackPanel.add(frontTextField);
+
+        backLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        backLabel.setText("Back");
+        frontBackPanel.add(backLabel);
+
+        backTextField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        frontBackPanel.add(backTextField);
+
+        buildCard.add(frontBackPanel);
+
+        addPanel.setLayout(new java.awt.GridLayout(2, 2));
+        addPanel.add(filler3);
+
+        addCard.setText("Add card");
+        addPanel.add(addCard);
+        addPanel.add(filler4);
+        addPanel.add(errorLabel);
+
+        buildCard.add(addPanel);
+
+        backPanel.setLayout(new java.awt.GridLayout(2, 3));
+        backPanel.add(filler5);
+        backPanel.add(filler6);
+        backPanel.add(filler7);
+
+        backButton.setText("Back");
+        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                backButtonMouseClicked(evt);
+            }
+        });
+        backPanel.add(backButton);
+        backPanel.add(filler2);
+
+        buildCard.add(backPanel);
 
         mainFrame.add(buildCard, "buildCard");
 
-        jLabel2.setText("Study");
+        studyCard.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout studyCardLayout = new javax.swing.GroupLayout(studyCard);
-        studyCard.setLayout(studyCardLayout);
-        studyCardLayout.setHorizontalGroup(
-            studyCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, studyCardLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(281, 281, 281))
+        javax.swing.GroupLayout flashcardPanelLayout = new javax.swing.GroupLayout(flashcardPanel);
+        flashcardPanel.setLayout(flashcardPanelLayout);
+        flashcardPanelLayout.setHorizontalGroup(
+            flashcardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
-        studyCardLayout.setVerticalGroup(
-            studyCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(studyCardLayout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(jLabel2)
-                .addContainerGap(325, Short.MAX_VALUE))
+        flashcardPanelLayout.setVerticalGroup(
+            flashcardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        studyCard.add(flashcardPanel, java.awt.BorderLayout.CENTER);
+
+        studyLabel.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        studyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        studyLabel.setText("Study");
+        studyCard.add(studyLabel, java.awt.BorderLayout.PAGE_START);
+
+        buttonGroup.setLayout(new java.awt.GridLayout(2, 3, 80, 20));
+
+        prevButton.setText("Prev");
+        prevButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        buttonGroup.add(prevButton);
+
+        flipButton.setText("Flip");
+        flipButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        buttonGroup.add(flipButton);
+
+        nextButton.setText("Next");
+        nextButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        buttonGroup.add(nextButton);
+
+        studyBackButton.setText("Back");
+        studyBackButton.setPreferredSize(new java.awt.Dimension(100, 40));
+        buttonGroup.add(studyBackButton);
+        buttonGroup.add(filler1);
+
+        studyCard.add(buttonGroup, java.awt.BorderLayout.SOUTH);
 
         mainFrame.add(studyCard, "studyCard");
 
-        jLabel3.setText("View all");
+        viewAllCard.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout viewAllCardLayout = new javax.swing.GroupLayout(viewAllCard);
-        viewAllCard.setLayout(viewAllCardLayout);
-        viewAllCardLayout.setHorizontalGroup(
-            viewAllCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, viewAllCardLayout.createSequentialGroup()
-                .addContainerGap(363, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(243, 243, 243))
-        );
-        viewAllCardLayout.setVerticalGroup(
-            viewAllCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(viewAllCardLayout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(312, Short.MAX_VALUE))
-        );
+        allCardsLabel.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        allCardsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        allCardsLabel.setText("All Cards");
+        viewAllCard.add(allCardsLabel, java.awt.BorderLayout.NORTH);
+
+        jScrollPane1.setViewportView(jList1);
+
+        viewAllCard.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        viewAllButtonGroup.setLayout(new java.awt.GridLayout(2, 3, 80, 20));
+
+        removeButton.setText("Remove");
+        removeButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        viewAllButtonGroup.add(removeButton);
+        viewAllButtonGroup.add(filler8);
+
+        viewAllBackButton.setText("Back");
+        viewAllBackButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        viewAllButtonGroup.add(viewAllBackButton);
+
+        viewAllCard.add(viewAllButtonGroup, java.awt.BorderLayout.SOUTH);
 
         mainFrame.add(viewAllCard, "viewAllCard");
 
@@ -167,14 +256,14 @@ public class MainScreen extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(mainFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+                .addComponent(mainFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(mainFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                .addComponent(mainFrame, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -195,6 +284,10 @@ public class MainScreen extends javax.swing.JFrame {
         CardLayout layout = (CardLayout) mainFrame.getLayout();
         layout.show(mainFrame, "viewAllCard");
     }//GEN-LAST:event_viewAllButtonMouseClicked
+
+    private void backButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backButtonMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_backButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -233,19 +326,48 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addCard;
+    private javax.swing.JPanel addPanel;
+    private javax.swing.JLabel allCardsLabel;
+    private javax.swing.JButton backButton;
+    private javax.swing.JLabel backLabel;
+    private javax.swing.JPanel backPanel;
+    private javax.swing.JTextField backTextField;
     private javax.swing.JButton buildButton;
     private javax.swing.JPanel buildCard;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel buildCardLabel;
+    private javax.swing.JPanel buttonGroup;
+    private javax.swing.JLabel errorLabel;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.JPanel flashcardPanel;
+    private javax.swing.JButton flipButton;
+    private javax.swing.JPanel frontBackPanel;
+    private javax.swing.JLabel frontLabel;
+    private javax.swing.JTextField frontTextField;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainFrame;
     private javax.swing.JPanel menuButtons;
     private javax.swing.JPanel menuCard;
+    private javax.swing.JButton nextButton;
+    private javax.swing.JButton prevButton;
+    private javax.swing.JButton removeButton;
     private javax.swing.JLabel spacerLabel;
+    private javax.swing.JButton studyBackButton;
     private javax.swing.JButton studyButton;
     private javax.swing.JPanel studyCard;
+    private javax.swing.JLabel studyLabel;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JButton viewAllBackButton;
     private javax.swing.JButton viewAllButton;
+    private javax.swing.JPanel viewAllButtonGroup;
     private javax.swing.JPanel viewAllCard;
     // End of variables declaration//GEN-END:variables
 }
