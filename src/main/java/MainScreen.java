@@ -1,33 +1,41 @@
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.util.ArrayList;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.DefaultListModel;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 /**
  *
  * @author william.li
  */
 public class MainScreen extends javax.swing.JFrame {
 
+    private FlashcardManager flashcardManager;
+    private final DefaultListModel<String> cardListModel;
+
     /**
      * Creates new form Cardbulider
      */
     public MainScreen() {
+        flashcardManager = new FlashcardManager();
         initComponents();
 
         setTitle("Flashcard Builder");
         setLocationRelativeTo(null);
 
         this.setVisible(true);
+
+        cardListModel = new DefaultListModel<>();
+        cardList.setModel(cardListModel);
+    }
+
+    private void refreshCardList() {
+        cardListModel.clear();
+
+        ArrayList<Flashcard> flashcards = flashcardManager.getCards();
+        for (Flashcard card : flashcards) {
+            cardListModel.addElement(card.getFront());
+        }
     }
 
     /**
@@ -59,12 +67,12 @@ public class MainScreen extends javax.swing.JFrame {
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         addCard = new javax.swing.JButton();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        errorLabel = new javax.swing.JLabel();
+        validationLabel = new javax.swing.JLabel();
         backPanel = new javax.swing.JPanel();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        backButton = new javax.swing.JButton();
+        buildBackButton = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         studyCard = new javax.swing.JPanel();
         flashcardPanel = new javax.swing.JPanel();
@@ -77,12 +85,14 @@ public class MainScreen extends javax.swing.JFrame {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         viewAllCard = new javax.swing.JPanel();
         allCardsLabel = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listScrollPane = new javax.swing.JScrollPane();
+        cardList = new javax.swing.JList<>();
         viewAllButtonGroup = new javax.swing.JPanel();
         removeButton = new javax.swing.JButton();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         viewAllBackButton = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -157,24 +167,29 @@ public class MainScreen extends javax.swing.JFrame {
         addPanel.add(filler3);
 
         addCard.setText("Add card");
+        addCard.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addCardMouseClicked(evt);
+            }
+        });
         addPanel.add(addCard);
         addPanel.add(filler4);
-        addPanel.add(errorLabel);
+        addPanel.add(validationLabel);
 
         buildCard.add(addPanel);
 
-        backPanel.setLayout(new java.awt.GridLayout(2, 3));
+        backPanel.setLayout(new java.awt.GridLayout(2, 3, 80, 0));
         backPanel.add(filler5);
         backPanel.add(filler6);
         backPanel.add(filler7);
 
-        backButton.setText("Back");
-        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        buildBackButton.setText("Back");
+        buildBackButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                backButtonMouseClicked(evt);
+                buildBackButtonMouseClicked(evt);
             }
         });
-        backPanel.add(backButton);
+        backPanel.add(buildBackButton);
         backPanel.add(filler2);
 
         buildCard.add(backPanel);
@@ -217,6 +232,11 @@ public class MainScreen extends javax.swing.JFrame {
 
         studyBackButton.setText("Back");
         studyBackButton.setPreferredSize(new java.awt.Dimension(100, 40));
+        studyBackButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                studyBackButtonMouseClicked(evt);
+            }
+        });
         buttonGroup.add(studyBackButton);
         buttonGroup.add(filler1);
 
@@ -224,27 +244,39 @@ public class MainScreen extends javax.swing.JFrame {
 
         mainFrame.add(studyCard, "studyCard");
 
-        viewAllCard.setLayout(new java.awt.BorderLayout());
+        viewAllCard.setLayout(new java.awt.BorderLayout(0, 10));
 
         allCardsLabel.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         allCardsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         allCardsLabel.setText("All Cards");
         viewAllCard.add(allCardsLabel, java.awt.BorderLayout.NORTH);
 
-        jScrollPane1.setViewportView(jList1);
+        listScrollPane.setViewportView(cardList);
 
-        viewAllCard.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        viewAllCard.add(listScrollPane, java.awt.BorderLayout.CENTER);
 
         viewAllButtonGroup.setLayout(new java.awt.GridLayout(2, 3, 80, 20));
 
         removeButton.setText("Remove");
         removeButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        removeButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                removeButtonMouseClicked(evt);
+            }
+        });
         viewAllButtonGroup.add(removeButton);
-        viewAllButtonGroup.add(filler8);
+        viewAllButtonGroup.add(filler9);
+        viewAllButtonGroup.add(filler10);
 
         viewAllBackButton.setText("Back");
         viewAllBackButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        viewAllBackButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                viewAllBackButtonMouseClicked(evt);
+            }
+        });
         viewAllButtonGroup.add(viewAllBackButton);
+        viewAllButtonGroup.add(filler8);
 
         viewAllCard.add(viewAllButtonGroup, java.awt.BorderLayout.SOUTH);
 
@@ -285,9 +317,50 @@ public class MainScreen extends javax.swing.JFrame {
         layout.show(mainFrame, "viewAllCard");
     }//GEN-LAST:event_viewAllButtonMouseClicked
 
-    private void backButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backButtonMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_backButtonMouseClicked
+    private void buildBackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buildBackButtonMouseClicked
+        CardLayout layout = (CardLayout) mainFrame.getLayout();
+        layout.show(mainFrame, "menuCard");
+        frontTextField.setText("");
+        backTextField.setText("");
+        validationLabel.setText("");
+    }//GEN-LAST:event_buildBackButtonMouseClicked
+
+    private void addCardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addCardMouseClicked
+        String frontText = frontTextField.getText();
+        String backText = backTextField.getText();
+
+        if (frontText.isBlank() || backText.isBlank()) {
+            validationLabel.setText("Please fill in all fields");
+            validationLabel.setForeground(Color.red);
+            return;
+        }
+
+        Flashcard newCard = new Flashcard(frontText, backText);
+        flashcardManager.addCard(newCard);
+        refreshCardList();
+
+        validationLabel.setText("Card added!");
+        validationLabel.setForeground(Color.green);
+        frontTextField.setText("");
+        backTextField.setText("");
+    }//GEN-LAST:event_addCardMouseClicked
+
+    private void studyBackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studyBackButtonMouseClicked
+        CardLayout layout = (CardLayout) mainFrame.getLayout();
+        layout.show(mainFrame, "menuCard");
+    }//GEN-LAST:event_studyBackButtonMouseClicked
+
+    private void viewAllBackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewAllBackButtonMouseClicked
+        CardLayout layout = (CardLayout) mainFrame.getLayout();
+        layout.show(mainFrame, "menuCard");
+    }//GEN-LAST:event_viewAllBackButtonMouseClicked
+
+    private void removeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeButtonMouseClicked
+        int index = cardList.getSelectedIndex();
+        flashcardManager.removeCard(index);
+        
+        refreshCardList();
+    }//GEN-LAST:event_removeButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -329,16 +402,17 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton addCard;
     private javax.swing.JPanel addPanel;
     private javax.swing.JLabel allCardsLabel;
-    private javax.swing.JButton backButton;
     private javax.swing.JLabel backLabel;
     private javax.swing.JPanel backPanel;
     private javax.swing.JTextField backTextField;
+    private javax.swing.JButton buildBackButton;
     private javax.swing.JButton buildButton;
     private javax.swing.JPanel buildCard;
     private javax.swing.JLabel buildCardLabel;
     private javax.swing.JPanel buttonGroup;
-    private javax.swing.JLabel errorLabel;
+    private javax.swing.JList<String> cardList;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
@@ -346,13 +420,13 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JPanel flashcardPanel;
     private javax.swing.JButton flipButton;
     private javax.swing.JPanel frontBackPanel;
     private javax.swing.JLabel frontLabel;
     private javax.swing.JTextField frontTextField;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane listScrollPane;
     private javax.swing.JPanel mainFrame;
     private javax.swing.JPanel menuButtons;
     private javax.swing.JPanel menuCard;
@@ -365,6 +439,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPanel studyCard;
     private javax.swing.JLabel studyLabel;
     private javax.swing.JLabel titleLabel;
+    private javax.swing.JLabel validationLabel;
     private javax.swing.JButton viewAllBackButton;
     private javax.swing.JButton viewAllButton;
     private javax.swing.JPanel viewAllButtonGroup;

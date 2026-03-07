@@ -197,6 +197,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Add card"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="addCardMouseClicked"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.Box$Filler" name="filler4">
                   <Properties>
@@ -208,7 +211,7 @@
                     <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JLabel" name="errorLabel">
+                <Component class="javax.swing.JLabel" name="validationLabel">
                 </Component>
               </SubComponents>
             </Container>
@@ -216,6 +219,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="3"/>
+                <Property name="horizontalGap" type="int" value="80"/>
                 <Property name="rows" type="int" value="2"/>
               </Layout>
               <SubComponents>
@@ -249,12 +253,12 @@
                     <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JButton" name="backButton">
+                <Component class="javax.swing.JButton" name="buildBackButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Back"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="backButtonMouseClicked"/>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="buildBackButtonMouseClicked"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.Box$Filler" name="filler2">
@@ -359,6 +363,9 @@
                       <Dimension value="[100, 40]"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="studyBackButtonMouseClicked"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.Box$Filler" name="filler1">
                   <Properties>
@@ -381,7 +388,9 @@
             </Constraint>
           </Constraints>
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout">
+            <Property name="verticalGap" type="int" value="10"/>
+          </Layout>
           <SubComponents>
             <Component class="javax.swing.JLabel" name="allCardsLabel">
               <Properties>
@@ -397,7 +406,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+            <Container class="javax.swing.JScrollPane" name="listScrollPane">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                   <BorderConstraints direction="Center"/>
@@ -406,7 +415,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JList" name="jList1">
+                <Component class="javax.swing.JList" name="cardList">
                   <Properties>
                     <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                       <StringArray count="0"/>
@@ -439,8 +448,21 @@
                       <Dimension value="[80, 36]"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="removeButtonMouseClicked"/>
+                  </Events>
                 </Component>
-                <Component class="javax.swing.Box$Filler" name="filler8">
+                <Component class="javax.swing.Box$Filler" name="filler9">
+                  <Properties>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[32767, 0]"/>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.Box$Filler" name="filler10">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[32767, 0]"/>
@@ -457,6 +479,19 @@
                       <Dimension value="[80, 36]"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="viewAllBackButtonMouseClicked"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.Box$Filler" name="filler8">
+                  <Properties>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[32767, 0]"/>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
