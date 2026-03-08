@@ -32,7 +32,11 @@ public class FlashcardManager {
     public ArrayList<Flashcard> getCards() {
         return flashcards;
     }
-
+    
+    public int getCardCount(){
+        return flashcards.size();
+    }
+    
     public void loadFromFile() {
         ArrayList<String> contents = fileRead.retrieveDataListFromFile(FILE_NAME);
 

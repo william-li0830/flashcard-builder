@@ -10,25 +10,28 @@ import javax.swing.DefaultListModel;
  */
 public class MainScreen extends javax.swing.JFrame {
 
-    private FlashcardManager flashcardManager;
+    private final FlashcardManager flashcardManager;
     private final DefaultListModel<String> cardListModel;
+
+    // True if the back of the card is shown
+    private boolean isFlipped = false;
+    private int currentIndex = 0;
 
     /**
      * Creates new form Cardbulider
      */
     public MainScreen() {
+        initComponents();
+        setTitle("Flashcard Builder");
+        setLocationRelativeTo(null);
+        this.setVisible(true);
+
         flashcardManager = new FlashcardManager();
         flashcardManager.loadFromFile();
 
-        initComponents();
-
-        setTitle("Flashcard Builder");
-        setLocationRelativeTo(null);
-
-        this.setVisible(true);
-
         cardListModel = new DefaultListModel<>();
         cardList.setModel(cardListModel);
+        
         refreshCardList();
     }
 
@@ -43,7 +46,7 @@ public class MainScreen extends javax.swing.JFrame {
 
     private boolean doesFlashcardExist(String front) {
         ArrayList<Flashcard> cards = flashcardManager.getCards();
-        
+
         for (Flashcard card : cards) {
             String cardFront = card.getFront();
             if (cardFront.equalsIgnoreCase(front)) {
@@ -51,6 +54,19 @@ public class MainScreen extends javax.swing.JFrame {
             }
         }
         return false;
+    }
+
+    private void updateStudyCard() {
+        ArrayList<Flashcard> cards = flashcardManager.getCards();
+        Flashcard card = cards.get(currentIndex);
+
+        if (isFlipped) {
+            cardTextPane.setText(card.getBack());
+        } else {
+            cardTextPane.setText(card.getFront());
+        }
+
+        cardProgressLabel.setText("Card " + (currentIndex + 1) + " of " + cards.size());
     }
 
     /**
@@ -90,8 +106,9 @@ public class MainScreen extends javax.swing.JFrame {
         buildBackButton = new javax.swing.JButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         studyCard = new javax.swing.JPanel();
-        flashcardPanel = new javax.swing.JPanel();
-        studyLabel = new javax.swing.JLabel();
+        cardProgressLabel = new javax.swing.JLabel();
+        cardScrollPane = new javax.swing.JScrollPane();
+        cardTextPane = new javax.swing.JTextPane();
         buttonGroup = new javax.swing.JPanel();
         prevButton = new javax.swing.JButton();
         flipButton = new javax.swing.JButton();
@@ -211,38 +228,51 @@ public class MainScreen extends javax.swing.JFrame {
 
         mainFrame.add(buildCard, "buildCard");
 
-        studyCard.setLayout(new java.awt.BorderLayout());
+        studyCard.setLayout(new java.awt.BorderLayout(0, 10));
 
-        javax.swing.GroupLayout flashcardPanelLayout = new javax.swing.GroupLayout(flashcardPanel);
-        flashcardPanel.setLayout(flashcardPanelLayout);
-        flashcardPanelLayout.setHorizontalGroup(
-            flashcardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        flashcardPanelLayout.setVerticalGroup(
-            flashcardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        cardProgressLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cardProgressLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cardProgressLabel.setText("Card");
+        studyCard.add(cardProgressLabel, java.awt.BorderLayout.PAGE_START);
 
-        studyCard.add(flashcardPanel, java.awt.BorderLayout.CENTER);
+        cardScrollPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        cardScrollPane.setPreferredSize(new java.awt.Dimension(500, 200));
 
-        studyLabel.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        studyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        studyLabel.setText("Study");
-        studyCard.add(studyLabel, java.awt.BorderLayout.PAGE_START);
+        cardTextPane.setEditable(false);
+        cardTextPane.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cardTextPane.setFocusable(false);
+        cardTextPane.setOpaque(false);
+        cardScrollPane.setViewportView(cardTextPane);
+
+        studyCard.add(cardScrollPane, java.awt.BorderLayout.CENTER);
 
         buttonGroup.setLayout(new java.awt.GridLayout(2, 3, 80, 20));
 
         prevButton.setText("Prev");
         prevButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        prevButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                prevButtonMouseClicked(evt);
+            }
+        });
         buttonGroup.add(prevButton);
 
         flipButton.setText("Flip");
         flipButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        flipButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                flipButtonMouseClicked(evt);
+            }
+        });
         buttonGroup.add(flipButton);
 
         nextButton.setText("Next");
         nextButton.setPreferredSize(new java.awt.Dimension(80, 36));
+        nextButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                nextButtonMouseClicked(evt);
+            }
+        });
         buttonGroup.add(nextButton);
 
         studyBackButton.setText("Back");
@@ -320,6 +350,8 @@ public class MainScreen extends javax.swing.JFrame {
     private void studyButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studyButtonMouseClicked
         CardLayout layout = (CardLayout) mainFrame.getLayout();
         layout.show(mainFrame, "studyCard");
+        isFlipped = false;
+        updateStudyCard();
     }//GEN-LAST:event_studyButtonMouseClicked
 
     private void buildButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buildButtonMouseClicked
@@ -384,6 +416,33 @@ public class MainScreen extends javax.swing.JFrame {
         refreshCardList();
     }//GEN-LAST:event_removeButtonMouseClicked
 
+    private void flipButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flipButtonMouseClicked
+        isFlipped = !isFlipped;
+        updateStudyCard();
+    }//GEN-LAST:event_flipButtonMouseClicked
+
+    private void prevButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prevButtonMouseClicked
+        isFlipped = false;
+        currentIndex--;
+        
+        if (currentIndex < 0) {
+            currentIndex = flashcardManager.getCardCount() - 1;
+        }
+        
+        updateStudyCard();
+    }//GEN-LAST:event_prevButtonMouseClicked
+
+    private void nextButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nextButtonMouseClicked
+        isFlipped = false;
+        currentIndex++;
+        
+        if(currentIndex >= flashcardManager.getCardCount()){
+            currentIndex = 0;
+        }
+        
+        updateStudyCard();
+    }//GEN-LAST:event_nextButtonMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -433,6 +492,9 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JLabel buildCardLabel;
     private javax.swing.JPanel buttonGroup;
     private javax.swing.JList<String> cardList;
+    private javax.swing.JLabel cardProgressLabel;
+    private javax.swing.JScrollPane cardScrollPane;
+    private javax.swing.JTextPane cardTextPane;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler2;
@@ -443,7 +505,6 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
-    private javax.swing.JPanel flashcardPanel;
     private javax.swing.JButton flipButton;
     private javax.swing.JPanel frontBackPanel;
     private javax.swing.JLabel frontLabel;
@@ -459,7 +520,6 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton studyBackButton;
     private javax.swing.JButton studyButton;
     private javax.swing.JPanel studyCard;
-    private javax.swing.JLabel studyLabel;
     private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel validationLabel;
     private javax.swing.JButton viewAllBackButton;
