@@ -1,8 +1,14 @@
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.DefaultListModel;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -67,6 +73,53 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         cardProgressLabel.setText("Card " + (currentIndex + 1) + " of " + cards.size());
+    }
+    
+        
+    private void setupKeyBindings(){
+        InputMap input = studyCard.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actions = studyCard.getActionMap();
+
+        input.put(KeyStroke.getKeyStroke("RIGHT"), "next");
+        input.put(KeyStroke.getKeyStroke("LEFT"), "prev");
+        input.put(KeyStroke.getKeyStroke("ENTER"), "flip");
+
+        // TODO: call the corresponding methods to update the card
+        actions.put("next", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("NEXT PRESSED");
+            }
+        });
+
+        actions.put("prev", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("PREV PRESSED");
+            }
+        });
+
+        actions.put("flip", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("FLIP PRESSED");
+            }
+        });
+    }
+    
+    // TODO: move all the code from mouse click here
+    //       and use these functions to navigate cards 
+    //       for both keybindings and mouse clicks
+    private void prevCard() {
+        
+    }
+    
+    private void nextCard() {
+        
+    }
+    
+    private void flipCard() {
+        
     }
 
     /**
