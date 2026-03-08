@@ -9,6 +9,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -37,16 +39,23 @@ public class MainScreen extends javax.swing.JFrame {
 
         cardListModel = new DefaultListModel<>();
         cardList.setModel(cardListModel);
-        
+
         refreshCardList();
+        addDocumentListener();
     }
 
     private void refreshCardList() {
         cardListModel.clear();
+        
+        String filter = searchField.getText();
 
         ArrayList<Flashcard> flashcards = flashcardManager.getCards();
         for (Flashcard card : flashcards) {
-            cardListModel.addElement(card.getFront());
+            String frontText = card.getFront();
+            
+            if (frontText.toLowerCase().contains(filter.toLowerCase())) {
+                cardListModel.addElement(frontText);
+            }
         }
     }
 
@@ -75,8 +84,31 @@ public class MainScreen extends javax.swing.JFrame {
         cardProgressLabel.setText("Card " + (currentIndex + 1) + " of " + cards.size());
     }
     
-        
-    private void setupKeyBindings(){
+    private void addDocumentListener() {
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterList();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterList();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterList();
+            }
+
+            private void filterList() {
+                refreshCardList();
+            }
+
+        });
+    }
+
+    private void setupKeyBindings() {
         InputMap input = studyCard.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actions = studyCard.getActionMap();
 
@@ -102,24 +134,23 @@ public class MainScreen extends javax.swing.JFrame {
         actions.put("flip", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("FLIP PRESSED");
             }
         });
     }
-    
+
     // TODO: move all the code from mouse click here
     //       and use these functions to navigate cards 
     //       for both keybindings and mouse clicks
     private void prevCard() {
-        
+
     }
-    
+
     private void nextCard() {
-        
+
     }
-    
+
     private void flipCard() {
-        
+
     }
 
     /**
@@ -130,7 +161,6 @@ public class MainScreen extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         mainFrame = new javax.swing.JPanel();
         menuCard = new javax.swing.JPanel();
@@ -173,10 +203,11 @@ public class MainScreen extends javax.swing.JFrame {
         listScrollPane = new javax.swing.JScrollPane();
         cardList = new javax.swing.JList<>();
         viewAllButtonGroup = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        searchField = new javax.swing.JTextField();
         removeButton = new javax.swing.JButton();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         viewAllBackButton = new javax.swing.JButton();
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -355,6 +386,12 @@ public class MainScreen extends javax.swing.JFrame {
 
         viewAllButtonGroup.setLayout(new java.awt.GridLayout(2, 3, 80, 20));
 
+        jLabel1.setText("Seach:");
+        viewAllButtonGroup.add(jLabel1);
+
+        searchField.setToolTipText("Search");
+        viewAllButtonGroup.add(searchField);
+
         removeButton.setText("Remove");
         removeButton.setPreferredSize(new java.awt.Dimension(80, 36));
         removeButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -363,8 +400,6 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
         viewAllButtonGroup.add(removeButton);
-        viewAllButtonGroup.add(filler9);
-        viewAllButtonGroup.add(filler10);
 
         viewAllBackButton.setText("Back");
         viewAllBackButton.setPreferredSize(new java.awt.Dimension(80, 36));
@@ -374,6 +409,7 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
         viewAllButtonGroup.add(viewAllBackButton);
+        viewAllButtonGroup.add(filler10);
         viewAllButtonGroup.add(filler8);
 
         viewAllCard.add(viewAllButtonGroup, java.awt.BorderLayout.SOUTH);
@@ -460,6 +496,7 @@ public class MainScreen extends javax.swing.JFrame {
     private void viewAllBackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewAllBackButtonMouseClicked
         CardLayout layout = (CardLayout) mainFrame.getLayout();
         layout.show(mainFrame, "menuCard");
+        searchField.setText("");
     }//GEN-LAST:event_viewAllBackButtonMouseClicked
 
     private void removeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeButtonMouseClicked
@@ -477,22 +514,22 @@ public class MainScreen extends javax.swing.JFrame {
     private void prevButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prevButtonMouseClicked
         isFlipped = false;
         currentIndex--;
-        
+
         if (currentIndex < 0) {
             currentIndex = flashcardManager.getCardCount() - 1;
         }
-        
+
         updateStudyCard();
     }//GEN-LAST:event_prevButtonMouseClicked
 
     private void nextButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nextButtonMouseClicked
         isFlipped = false;
         currentIndex++;
-        
-        if(currentIndex >= flashcardManager.getCardCount()){
+
+        if (currentIndex >= flashcardManager.getCardCount()) {
             currentIndex = 0;
         }
-        
+
         updateStudyCard();
     }//GEN-LAST:event_nextButtonMouseClicked
 
@@ -557,11 +594,11 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
-    private javax.swing.Box.Filler filler9;
     private javax.swing.JButton flipButton;
     private javax.swing.JPanel frontBackPanel;
     private javax.swing.JLabel frontLabel;
     private javax.swing.JTextField frontTextField;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane listScrollPane;
     private javax.swing.JPanel mainFrame;
     private javax.swing.JPanel menuButtons;
@@ -569,6 +606,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton nextButton;
     private javax.swing.JButton prevButton;
     private javax.swing.JButton removeButton;
+    private javax.swing.JTextField searchField;
     private javax.swing.JLabel spacerLabel;
     private javax.swing.JButton studyBackButton;
     private javax.swing.JButton studyButton;

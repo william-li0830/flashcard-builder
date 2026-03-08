@@ -466,6 +466,16 @@
                 <Property name="verticalGap" type="int" value="20"/>
               </Layout>
               <SubComponents>
+                <Component class="javax.swing.JLabel" name="jLabel1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Seach:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="searchField">
+                  <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Search"/>
+                  </Properties>
+                </Component>
                 <Component class="javax.swing.JButton" name="removeButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Remove"/>
@@ -477,26 +487,6 @@
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="removeButtonMouseClicked"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.Box$Filler" name="filler9">
-                  <Properties>
-                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[32767, 0]"/>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
-                  </AuxValues>
-                </Component>
-                <Component class="javax.swing.Box$Filler" name="filler10">
-                  <Properties>
-                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[32767, 0]"/>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
-                  </AuxValues>
-                </Component>
                 <Component class="javax.swing.JButton" name="viewAllBackButton">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Back"/>
@@ -507,6 +497,16 @@
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="viewAllBackButtonMouseClicked"/>
                   </Events>
+                </Component>
+                <Component class="javax.swing.Box$Filler" name="filler10">
+                  <Properties>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[32767, 0]"/>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalGlue"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.Box$Filler" name="filler8">
                   <Properties>
