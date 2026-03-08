@@ -25,9 +25,12 @@ public class MainScreen extends javax.swing.JFrame {
     private boolean isFlipped = false;
     private int currentIndex = 0;
 
-    /**
-     * Creates new form Cardbulider
-     */
+    
+    // TODO
+    // 1. Make menu screen button text bigger
+    // 2. Remove all the focused outline around button text
+    // 3. Refine the UI (font, button color etc)
+    
     public MainScreen() {
         initComponents();
         setTitle("Flashcard Builder");
