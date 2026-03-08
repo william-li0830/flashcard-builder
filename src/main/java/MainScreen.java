@@ -19,7 +19,7 @@ public class MainScreen extends javax.swing.JFrame {
     public MainScreen() {
         flashcardManager = new FlashcardManager();
         flashcardManager.loadFromFile();
-        
+
         initComponents();
 
         setTitle("Flashcard Builder");
@@ -39,6 +39,18 @@ public class MainScreen extends javax.swing.JFrame {
         for (Flashcard card : flashcards) {
             cardListModel.addElement(card.getFront());
         }
+    }
+
+    private boolean doesFlashcardExist(String front) {
+        ArrayList<Flashcard> cards = flashcardManager.getCards();
+        
+        for (Flashcard card : cards) {
+            String cardFront = card.getFront();
+            if (cardFront.equalsIgnoreCase(front)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -338,6 +350,13 @@ public class MainScreen extends javax.swing.JFrame {
             return;
         }
 
+        // Check for duplicate
+        if (doesFlashcardExist(frontText)) {
+            validationLabel.setText("Flash card already added");
+            validationLabel.setForeground(Color.red);
+            return;
+        }
+
         Flashcard newCard = new Flashcard(frontText, backText);
         flashcardManager.addCard(newCard);
         refreshCardList();
@@ -361,7 +380,7 @@ public class MainScreen extends javax.swing.JFrame {
     private void removeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeButtonMouseClicked
         int index = cardList.getSelectedIndex();
         flashcardManager.removeCard(index);
-        
+
         refreshCardList();
     }//GEN-LAST:event_removeButtonMouseClicked
 
