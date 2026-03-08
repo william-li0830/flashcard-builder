@@ -24,8 +24,13 @@ public class FlashcardManager {
         saveToFile();
     }
 
-    public void removeCard(int index) {
-        flashcards.remove(index);
+    public void removeCard(String frontText) {
+        for (Flashcard card : flashcards) {
+            if (card.getFront().equals(frontText)) {
+                flashcards.remove(card);
+                break;
+            }
+        }
         saveToFile();
     }
 

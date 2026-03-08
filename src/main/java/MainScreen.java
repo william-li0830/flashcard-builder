@@ -29,6 +29,7 @@ public class MainScreen extends javax.swing.JFrame {
     // TODO
     // 1. Make menu screen button text bigger
     // 2. Remove all the focused outline around button text
+    // 3. Make the text fields in build card bigger to allow longer input
     // 3. Refine the UI (font, button color etc)
     
     public MainScreen() {
@@ -503,8 +504,8 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_viewAllBackButtonMouseClicked
 
     private void removeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeButtonMouseClicked
-        int index = cardList.getSelectedIndex();
-        flashcardManager.removeCard(index);
+        String frontText = cardList.getSelectedValue();
+        flashcardManager.removeCard(frontText);
 
         refreshCardList();
     }//GEN-LAST:event_removeButtonMouseClicked
